@@ -2,7 +2,7 @@ import { Arg, Query, Resolver } from "type-graphql";
 import { Acao } from "../dtos/models/acao-model";
 import { AcaoInput } from "../dtos/inputs/acao-input";
 
-const webScraper = require('../scraping');
+const webScraper = require('../fundamentus-scraping');
 
 @Resolver(() => Acao)
 export class AcoesResolver {
