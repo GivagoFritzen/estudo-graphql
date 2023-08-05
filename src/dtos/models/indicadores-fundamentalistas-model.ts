@@ -44,7 +44,7 @@ export class IndicadoresFundamentalistas {
     @Field()
     liquidezCorr: number;
     @Field()
-    duvBrutaTotalDivididoPatrimonioLiquido: number;
+    divBrutaTotalDivididoPatrimonioLiquido: number;
     @Field()
     giroAtivos: number;
 }

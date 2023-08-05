@@ -9,11 +9,82 @@ type Acao {
   razaoSocial: String!
 }
 
-input AcaoInput {
+type AcaoCompleta {
+  cotacao: Float!
+  dadosBalancoPatrimonial: DadosBalancoPatrimonial!
+  dadosDemonstrativosDeResultadosUltimosDozeMeses: DadosDemonstrativosDeResultados!
+  dadosDemonstrativosDeResultadosUltimosTresMeses: DadosDemonstrativosDeResultados!
+  indicadoresFundamentalistas: IndicadoresFundamentalistas!
+  maxUltimasCinquentaDuasSemanas: Float!
+  minUltimasCinquentaDuasSemanas: Float!
+  numeroAcoes: Float!
+  oscilacoes: Oscilacoes!
   papel: String!
+  setor: String!
+  subsetor: String!
+  tipo: String!
+  ultimoBalancoProcessado: String!
+  valorFirma: Float!
+  valorMercado: Float!
+  volumeMedioNegociadoUltimosDoisMeses: Float!
+}
+
+input AcaoInput {
+  papeis: [String!]!
+}
+
+type DadosBalancoPatrimonial {
+  ativo: Float!
+  ativoCirculante: Float!
+  disponibilidades: Float!
+  dividaBruta: Float!
+  dividaLiquida: Float!
+  patrimonioLiquido: Float!
+}
+
+type DadosDemonstrativosDeResultados {
+  ebit: Float!
+  lucroLiquido: Float!
+  receitaLiquida: Float!
+}
+
+type IndicadoresFundamentalistas {
+  crescimentoReceitaCincoAnosPorcentagem: Float!
+  divBrutaTotalDivididoPatrimonioLiquido: Float!
+  dividendYieldPorcentagem: Float!
+  ebit_AtivoPorcentagem: Float!
+  ev_ebit: Float!
+  ev_ebitda: Float!
+  giroAtivos: Float!
+  liquidezCorr: Float!
+  lpa: Float!
+  margemBrutaPorcentagem: Float!
+  margemEbitPorcentagem: Float!
+  margemLiquidaPorcentagem: Float!
+  p_ativoCirculantesLiquitos: Float!
+  p_ativos: Float!
+  p_capGiro: Float!
+  p_ebit: Float!
+  p_l: Float!
+  p_vp: Float!
+  psr: Float!
+  roePorcentagem: Float!
+  roicPorcentagem: Float!
+  vpa: Float!
+}
+
+type Oscilacoes {
+  anoAnteriorPorcentagem: Float!
+  diaPorcentagem: Float!
+  doisAnosAntesPorcentagem: Float!
+  dozeMesesPorcentagem: Float!
+  mesPorcentagem: Float!
+  quatroAnosAntesPorcentagem: Float!
+  tresAnosAntesPorcentagem: Float!
+  trintaDiasPorcentagem: Float!
 }
 
 type Query {
-  acao(data: AcaoInput!): Acao!
-  acoes: [Acao!]!
+  getDetalhesAcoes(data: AcaoInput!): [AcaoCompleta!]!
+  getPapeis: [Acao!]!
 }

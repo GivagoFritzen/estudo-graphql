@@ -1,7 +1,7 @@
 import { Field, ObjectType } from "type-graphql";
 
 @ObjectType()
-export class Ocilacoes {
+export class Oscilacoes {
     @Field()
     diaPorcentagem: number;
     @Field()

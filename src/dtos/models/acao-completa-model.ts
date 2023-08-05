@@ -1,12 +1,13 @@
 import { Field, ObjectType } from "type-graphql";
-import { Acao } from "./acao-model";
-import { Ocilacoes } from "./oscilacoes-model";
+import { Oscilacoes } from "./oscilacoes-model";
 import { IndicadoresFundamentalistas } from "./indicadores-fundamentalistas-model";
 import { DadosBalancoPatrimonial } from "./dados-balanco-patrimonial-model";
 import { DadosDemonstrativosDeResultados } from "./dados-demonstrativos-de-resultados-model";
 
 @ObjectType()
-export class AcaoCompleta extends Acao {
+export class AcaoCompleta {
+    @Field()
+    papel: String;
     @Field()
     tipo: String;
     @Field()
@@ -21,19 +22,19 @@ export class AcaoCompleta extends Acao {
     @Field()
     maxUltimasCinquentaDuasSemanas: number;
     @Field()
-    volumeMedioNegociadoUltimosDoisMeses: String;
+    volumeMedioNegociadoUltimosDoisMeses: number;
 
     @Field()
     valorMercado: number;
     @Field()
     valorFirma: number;
     @Field()
-    ultimoBalancoProcessado: Date;
+    ultimoBalancoProcessado: String;
     @Field()
     numeroAcoes: number;
 
     @Field()
-    ocilacoes: Ocilacoes;
+    oscilacoes: Oscilacoes;
     @Field()
     indicadoresFundamentalistas: IndicadoresFundamentalistas;
     @Field()
