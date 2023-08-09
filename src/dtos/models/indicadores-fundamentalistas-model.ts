@@ -1,11 +1,8 @@
 import { Field, ObjectType } from "type-graphql";
+import { IndicadoresFundamentalistasSimplificado } from "./indicadores-fundamentalistas-simplificado-model";
 
 @ObjectType()
-export class IndicadoresFundamentalistas {
-    @Field()
-    p_l: number;
-    @Field()
-    p_vp: number;
+export class IndicadoresFundamentalistas extends IndicadoresFundamentalistasSimplificado {
     @Field()
     p_ebit: number;
     @Field()
@@ -13,38 +10,24 @@ export class IndicadoresFundamentalistas {
     @Field()
     p_ativos: number;
     @Field()
-    p_capGiro: number;
+    p_capGiro?: number;
     @Field()
-    p_ativoCirculantesLiquitos: number;
-    @Field()
-    dividendYieldPorcentagem: number;
+    p_ativoCirculantesLiquitos?: number;
     @Field()
     ev_ebitda: number;
     @Field()
     ev_ebit: number;
-    @Field()
-    crescimentoReceitaCincoAnosPorcentagem: number;
 
-    @Field()
-    lpa: number;
-    @Field()
-    vpa: number;
     @Field()
     margemBrutaPorcentagem: number;
     @Field()
     margemEbitPorcentagem: number;
     @Field()
-    margemLiquidaPorcentagem: number;
+    roicPorcentagem?: number;
     @Field()
-    ebit_AtivoPorcentagem: number;
+    liquidezCorr?: number;
     @Field()
-    roicPorcentagem: number;
-    @Field()
-    roePorcentagem: number;
-    @Field()
-    liquidezCorr: number;
-    @Field()
-    divBrutaTotalDivididoPatrimonioLiquido: number;
+    divBrutaTotalDivididoPatrimonioLiquido?: number;
     @Field()
     giroAtivos: number;
 }

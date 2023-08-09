@@ -11,11 +11,11 @@ export class Oscilacoes {
     @Field()
     dozeMesesPorcentagem: number;
     @Field()
-    anoAnteriorPorcentagem: number;
+    anoAnteriorPorcentagem?: number;
     @Field()
-    doisAnosAntesPorcentagem: number;
+    doisAnosAntesPorcentagem?: number;
     @Field()
-    tresAnosAntesPorcentagem: number;
+    tresAnosAntesPorcentagem?: number;
     @Field()
-    quatroAnosAntesPorcentagem: number;
+    quatroAnosAntesPorcentagem?: number;
 }

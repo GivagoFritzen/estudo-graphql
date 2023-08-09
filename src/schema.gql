@@ -33,6 +33,26 @@ input AcaoInput {
   papeis: [String!]!
 }
 
+type AcaoSetorBancario {
+  cotacao: Float!
+  dadosBalancoPatrimonial: DadosBalancoPatrimonialBancario!
+  dadosDemonstrativosDeResultadosUltimosDozeMeses: DadosDemonstrativosDeResultadosBancario!
+  dadosDemonstrativosDeResultadosUltimosTresMeses: DadosDemonstrativosDeResultadosBancario!
+  indicadoresFundamentalistas: IndicadoresFundamentalistasSimplificado!
+  maxUltimasCinquentaDuasSemanas: Float!
+  minUltimasCinquentaDuasSemanas: Float!
+  numeroAcoes: Float!
+  oscilacoes: Oscilacoes!
+  papel: String!
+  setor: String!
+  subsetor: String!
+  tipo: String!
+  ultimoBalancoProcessado: String!
+  valorFirma: Float!
+  valorMercado: Float!
+  volumeMedioNegociadoUltimosDoisMeses: Float!
+}
+
 type DadosBalancoPatrimonial {
   ativo: Float!
   ativoCirculante: Float!
@@ -42,10 +62,23 @@ type DadosBalancoPatrimonial {
   patrimonioLiquido: Float!
 }
 
+type DadosBalancoPatrimonialBancario {
+  ativo: Float!
+  carteiraDeCredito: Float!
+  depositos: Float!
+  patrimonioLiquido: Float!
+}
+
 type DadosDemonstrativosDeResultados {
   ebit: Float!
   lucroLiquido: Float!
   receitaLiquida: Float!
+}
+
+type DadosDemonstrativosDeResultadosBancario {
+  ResultadoDeIntermediacaoFinanceira: Float!
+  lucroLiquido: Float!
+  receitaDeServicos: Float!
 }
 
 type IndicadoresFundamentalistas {
@@ -73,6 +106,18 @@ type IndicadoresFundamentalistas {
   vpa: Float!
 }
 
+type IndicadoresFundamentalistasSimplificado {
+  crescimentoReceitaCincoAnosPorcentagem: Float!
+  dividendYieldPorcentagem: Float!
+  ebit_AtivoPorcentagem: Float!
+  lpa: Float!
+  margemLiquidaPorcentagem: Float!
+  p_l: Float!
+  p_vp: Float!
+  roePorcentagem: Float!
+  vpa: Float!
+}
+
 type Oscilacoes {
   anoAnteriorPorcentagem: Float!
   diaPorcentagem: Float!
@@ -86,5 +131,6 @@ type Oscilacoes {
 
 type Query {
   getDetalhesAcoes(data: AcaoInput!): [AcaoCompleta!]!
+  getDetalhesAcoesBancaria(data: AcaoInput!): [AcaoSetorBancario!]!
   getPapeis: [Acao!]!
 }
