@@ -1,19 +1,19 @@
 import { parse } from 'date-fns';
 import {
-    AcaoCompleta,
-    DadosBalancoPatrimonial,
-    DadosDemonstrativosDeResultados,
-    IndicadoresFundamentalistas,
+    AcaoSetorBancario,
+    DadosBalancoPatrimonialBancario,
+    DadosDemonstrativosDeResultadosBancario,
+    IndicadoresFundamentalistasSimplificado,
     Oscilacoes
 } from '../dtos/models';
 import { GenericMapper } from './generic-mapper';
 
-export class AcaoCompletaMapper extends GenericMapper {
-    static DetalhesPapelToAcaoCompleta(webScraper: DetalhesPapel[]): AcaoCompleta[] {
-        const acoesCompletas: AcaoCompleta[] = [];
+export class AcaoBancariaMapper extends GenericMapper {
+    static DetalhesPapelToAcaoBancaria(webScraper: DetalhesPapel[]): AcaoSetorBancario[] {
+        const acoesCompletas: AcaoSetorBancario[] = [];
 
         webScraper.forEach(element => {
-            const novaAcao = new AcaoCompleta();
+            const novaAcao = new AcaoSetorBancario();
 
             novaAcao.papel = element['Papel'];
             novaAcao.tipo = element['Tipo'];
@@ -41,50 +41,33 @@ export class AcaoCompletaMapper extends GenericMapper {
             oscilacoes.quatroAnosAntesPorcentagem = this.converterToDataAndGetYear(element, -4);
             novaAcao.oscilacoes = oscilacoes;
 
-            let indicadoresFundamentalistas = new IndicadoresFundamentalistas();
+            let indicadoresFundamentalistas = new IndicadoresFundamentalistasSimplificado();
             indicadoresFundamentalistas.p_l = this.converterToFloat(element['P/L']);
             indicadoresFundamentalistas.p_vp = this.converterToFloat(element['P/VP']);
-            indicadoresFundamentalistas.p_ebit = this.converterToFloat(element['P/EBIT']);
-            indicadoresFundamentalistas.psr = this.converterToFloat(element['PSR']);
-            indicadoresFundamentalistas.p_ativos = this.converterToFloat(element['P/Ativos']);
-            indicadoresFundamentalistas.p_capGiro = this.converterToFloat(element['P/Cap. Giro']);
-            indicadoresFundamentalistas.p_ativoCirculantesLiquitos = this.converterToFloat(element['P/Ativ Circ Liq']);
             indicadoresFundamentalistas.dividendYieldPorcentagem = this.converterToFloat(element['Div. Yield']);
-            indicadoresFundamentalistas.ev_ebitda = this.converterToFloat(element['EV / EBITDA']);
-            indicadoresFundamentalistas.ev_ebit = this.converterToFloat(element['EV / EBIT']);
             indicadoresFundamentalistas.crescimentoReceitaCincoAnosPorcentagem = this.converterToFloat(element['Cres. Rec (5a)']);
 
             indicadoresFundamentalistas.lpa = this.converterToFloat(element['LPA']);
             indicadoresFundamentalistas.vpa = this.converterToFloat(element['VPA']);
-            indicadoresFundamentalistas.margemBrutaPorcentagem = this.converterToFloat(element['Marg. Bruta']);
-            indicadoresFundamentalistas.margemEbitPorcentagem = this.converterToFloat(element['Marg. EBIT']);
             indicadoresFundamentalistas.margemLiquidaPorcentagem = this.converterToFloat(element['Marg. Líquida']);
             indicadoresFundamentalistas.ebit_AtivoPorcentagem = this.converterToFloat(element['EBIT / Ativo']);
-            indicadoresFundamentalistas.roicPorcentagem = this.converterToFloat(element['ROIC']);
             indicadoresFundamentalistas.roePorcentagem = this.converterToFloat(element['ROE']);
-            indicadoresFundamentalistas.liquidezCorr = this.converterToFloat(element['Liquidez Corr']);
-            indicadoresFundamentalistas.divBrutaTotalDivididoPatrimonioLiquido = this.converterToFloat(element['Div Br/ Patrim']);
-            indicadoresFundamentalistas.giroAtivos = this.converterToFloat(element['Giro Ativos']);
             novaAcao.indicadoresFundamentalistas = indicadoresFundamentalistas;
 
-            const dadosBalancoPatrimonial = new DadosBalancoPatrimonial();
+            const dadosBalancoPatrimonial = new DadosBalancoPatrimonialBancario();
             dadosBalancoPatrimonial.ativo = this.converterToFloat(element['Ativo']);
-            dadosBalancoPatrimonial.disponibilidades = this.converterToFloat(element['Disponibilidades']);
-            dadosBalancoPatrimonial.ativoCirculante = this.converterToFloat(element['Ativo Circulante']);
-            dadosBalancoPatrimonial.dividaBruta = this.converterToFloat(element['Dív. Bruta']);
-            dadosBalancoPatrimonial.dividaLiquida = this.converterToFloat(element['Dív. Líquida']);
             dadosBalancoPatrimonial.patrimonioLiquido = this.converterToFloat(element['Patrim. Líq']);
             novaAcao.dadosBalancoPatrimonial = dadosBalancoPatrimonial;
 
-            const dadosDemonstrativosDeResultadosUltimosTresMeses = new DadosDemonstrativosDeResultados();
-            dadosDemonstrativosDeResultadosUltimosTresMeses.receitaLiquida = this.converterToInt(element['Receita Líquida Ultimos Tres Meses']);
-            dadosDemonstrativosDeResultadosUltimosTresMeses.ebit = this.converterToInt(element['EBIT Ultimos Tres Meses']);
+            const dadosDemonstrativosDeResultadosUltimosTresMeses = new DadosDemonstrativosDeResultadosBancario();
+            dadosDemonstrativosDeResultadosUltimosTresMeses.resultadoDeIntermediacaoFinanceira = this.converterToInt(element['Result Int Financ Ultimos Tres Meses']);
+            dadosDemonstrativosDeResultadosUltimosTresMeses.receitaDeServicos = this.converterToInt(element['Rec Serviços Ultimos Tres Meses']);
             dadosDemonstrativosDeResultadosUltimosTresMeses.lucroLiquido = this.converterToInt(element['Lucro Líquido Ultimos Tres Meses']);
             novaAcao.dadosDemonstrativosDeResultadosUltimosTresMeses = dadosDemonstrativosDeResultadosUltimosTresMeses;
 
-            const dadosDemonstrativosDeResultadosUltimosDozeMeses = new DadosDemonstrativosDeResultados();
-            dadosDemonstrativosDeResultadosUltimosDozeMeses.receitaLiquida = this.converterToInt(element['Receita Líquida Ultimos Dozes Meses']);
-            dadosDemonstrativosDeResultadosUltimosDozeMeses.ebit = this.converterToInt(element['EBIT Ultimos Dozes Meses']);
+            const dadosDemonstrativosDeResultadosUltimosDozeMeses = new DadosDemonstrativosDeResultadosBancario();
+            dadosDemonstrativosDeResultadosUltimosDozeMeses.resultadoDeIntermediacaoFinanceira = this.converterToInt(element['Result Int Financ Ultimos Dozes Meses']);
+            dadosDemonstrativosDeResultadosUltimosDozeMeses.receitaDeServicos = this.converterToInt(element['Rec Serviços Ultimos Dozes Meses']);
             dadosDemonstrativosDeResultadosUltimosDozeMeses.lucroLiquido = this.converterToInt(element['Lucro Líquido Ultimos Dozes Meses']);
             novaAcao.dadosDemonstrativosDeResultadosUltimosDozeMeses = dadosDemonstrativosDeResultadosUltimosDozeMeses;
 

@@ -1,6 +1,7 @@
 import { Acao, AcaoCompleta, AcaoSetorBancario } from "./dtos/models";
 import { PapelBanco, PapelNaoBanco, PapelNaoEncontrado } from "./exception";
-import { AcaoCompletaMapper } from "./mapper/acao-completa-mapper";
+import { AcaoBancariaMapper, AcaoCompletaMapper } from "./mapper";
+import { AcaoValidator } from "./validator/acao-validator";
 
 const axios = require('axios');
 const cheerio = require('cheerio');
@@ -42,10 +43,10 @@ export class WebScraper {
             const promises = papeis.map(async papel => {
                 const $ = await this.getFundamentusPage(papel);
 
-                if (!this.papelExist($)) {
+                if (!AcaoValidator.papelExist($)) {
                     throw new PapelNaoEncontrado(papel);
                 }
-                if (!this.papelIsBanco($)) {
+                if (!AcaoValidator.papelIsBanco($)) {
                     throw new PapelBanco(papel);
                 }
 
@@ -89,10 +90,10 @@ export class WebScraper {
             const promises = papeis.map(async papel => {
                 const $ = await this.getFundamentusPage(papel);
 
-                if (!this.papelExist($)) {
+                if (!AcaoValidator.papelExist($)) {
                     throw new PapelNaoEncontrado(papel);
                 }
-                if (this.papelIsBanco($)) {
+                if (AcaoValidator.papelIsBanco($)) {
                     throw new PapelNaoBanco(papel);
                 }
 
@@ -102,7 +103,7 @@ export class WebScraper {
                 geral = { ...geral, ...this.getDetalheDoPapel(tables.eq(1), $, -1) };
                 const oscilacoesIndicadoresFundamentalistas = this.getDetalheDoPapel(tables.eq(2), $, 0);
                 const dadosBalancoPatrimonial = this.getDetalheDoPapel(tables.eq(3), $, 0);
-                const dadosDemonstrativosDeResultados = this.getDetalheDoPapelDadosDemonstrativosDeResultados(tables.eq(4), $, 1);
+                const dadosDemonstrativosDeResultados = this.getDetalheDoPapelDadosDemonstrativosDeResultadosBancario(tables.eq(4), $, 1);
 
                 return {
                     ...geral,
@@ -115,22 +116,12 @@ export class WebScraper {
             const result = await Promise.all(promises);
             webScraper.push(...result);
 
-            return [new AcaoSetorBancario()];
-            //return AcaoCompletaMapper.DetalhesPapelToAcaoCompleta(webScraper);
+            return AcaoBancariaMapper.DetalhesPapelToAcaoBancaria(webScraper);
         } catch (error) {
             console.log('Error:', error);
             throw error;
         }
     };
-
-
-
-
-
-
-
-
-
 
 
     private static async getFundamentusPage(papel: String): Promise<any> {
@@ -189,14 +180,19 @@ export class WebScraper {
         return dicionario;
     }
 
-    // Validator
-    private static papelExist = ($: any): boolean => {
-        const pageText = $('body').text();
-        return !pageText.includes("Nenhum papel encontrado");
-    }
+    private static getDetalheDoPapelDadosDemonstrativosDeResultadosBancario = (table: any, $: any, trIndex: number = -1): DetalhesPapel => {
+        const detalhes = this.getDetalheDoPapel(table, $, trIndex);
+        let dicionario: DetalhesPapel = {};
 
-    private static papelIsBanco = ($: any): boolean => {
-        const pageText = $('body').text();
-        return !pageText.includes("Result Int Financ");
+        dicionario['Result Int Financ Ultimos Dozes Meses'] = detalhes['Result Int Financ'];
+        dicionario['Result Int Financ Ultimos Tres Meses'] = detalhes['Result Int Financ0'];
+
+        dicionario['Rec Serviços Ultimos Dozes Meses'] = detalhes['Rec Serviços'];
+        dicionario['Rec Serviços Ultimos Tres Meses'] = detalhes['Rec Serviços1'];
+
+        dicionario['Lucro Líquido Ultimos Dozes Meses'] = detalhes['Lucro Líquido'];
+        dicionario['Lucro Líquido Ultimos Tres Meses'] = detalhes['Lucro Líquido2'];
+
+        return dicionario;
     }
 }

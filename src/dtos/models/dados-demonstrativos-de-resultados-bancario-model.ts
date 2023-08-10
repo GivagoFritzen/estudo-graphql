@@ -3,7 +3,7 @@ import { Field, ObjectType } from "type-graphql";
 @ObjectType()
 export class DadosDemonstrativosDeResultadosBancario {
     @Field()
-    ResultadoDeIntermediacaoFinanceira: number;
+    resultadoDeIntermediacaoFinanceira: number;
     @Field()
     receitaDeServicos: number;
     @Field()

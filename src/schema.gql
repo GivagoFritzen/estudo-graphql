@@ -76,9 +76,9 @@ type DadosDemonstrativosDeResultados {
 }
 
 type DadosDemonstrativosDeResultadosBancario {
-  ResultadoDeIntermediacaoFinanceira: Float!
   lucroLiquido: Float!
   receitaDeServicos: Float!
+  resultadoDeIntermediacaoFinanceira: Float!
 }
 
 type IndicadoresFundamentalistas {
